@@ -2,7 +2,7 @@
 import { setAuthToken } from "./axiosConfig.js";
 
 const apiUserUrl =
-  "https://backend-nopal-505940949397.us-central1.run.app/api/users";
+  "https://backend-tes-505940949397.us-central1.run.app/api/users";
 
 // DOM elements
 const loginEmail = document.getElementById("loginUsername");

@@ -1,6 +1,6 @@
 import { formatDate, setAuthHeader } from "./utils.js";
 
-const apiNotesUrl = "https://backend-nopal-505940949397.us-central1.run.app/api/notes";
+const apiNotesUrl = "https://backend-tes-505940949397.us-central1.run.app/api/notes";
 const tokenKey = "accessToken";
 
 const notesContainer = document.getElementById("notesContainer");
