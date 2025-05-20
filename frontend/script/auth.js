@@ -57,8 +57,9 @@ function setupAuthEventListeners() {
       console.log("Login response data:", res.data);
 
       // Misal backend kirim data user langsung di res.data.data
-      const user = res.data.safeUserData;
-      const accessToken = res.data.accessToken;
+      const user = res.data.data?.safeUserData;
+      const accessToken = res.data.data?.accessToken;
+
 
       if (!user) throw new Error("User data not found in response");
 
