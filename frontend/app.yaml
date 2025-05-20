@@ -1,0 +1,17 @@
+runtime: python39  
+service: frontend-nopal
+
+handlers:
+  - url: /
+    static_files: index.html
+    upload: index.html
+
+  - url: /(.*)
+    static_files: \1
+    upload: (.*)
+    secure: always
+    http_headers:
+      Access-Control-Allow-Origin: "https://frontend-nopal-dot-b-08-450916.uc.r.appspot.com"
+      Access-Control-Allow-Methods: "GET, POST, PUT, DELETE, OPTIONS"
+      Access-Control-Allow-Headers: "Content-Type, Authorization"
+      Access-Control-Allow-Credentials: "true"
