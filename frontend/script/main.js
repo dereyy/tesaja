@@ -1,22 +1,25 @@
+// main.js atau entry point
 import "./axiosConfig.js";
-import { showNotesApp, showAuth, clearAuthForms, setupAuthEventListeners } from "./auth.js";
+import {
+  setupAuthEventListeners,
+  showNotesApp,
+  showAuth,
+  clearAuthForms,
+} from "./auth.js";
 import { loadNotes, setupNotesEventListeners } from "./notes.js";
-import { ensureValidAccessToken, setAuthHeader } from "./utils.js";
-
+import { scheduleTokenRefresh } from "./axiosConfig.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const valid = await ensureValidAccessToken();
-    if (valid) {
-      setAuthHeader();
-      showNotesApp();
-      loadNotes();
-    } else {
-      showAuth();
-      clearAuthForms();
-    }
-    setupAuthEventListeners(() => {
-      showNotesApp();
-      loadNotes();
-    });
-    setupNotesEventListeners();
-  });
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    showNotesApp();
+    loadNotes();
+    scheduleTokenRefresh(); // <— kalau sudah login sebelumnya
+  } else {
+    showAuth();
+    clearAuthForms();
+  }
+
+  setupAuthEventListeners();
+  setupNotesEventListeners();
+});

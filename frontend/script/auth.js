@@ -1,5 +1,6 @@
 // script/auth.js
-import { setAuthToken } from "./axiosConfig.js";
+import axios from "axios";
+import { setAuthToken, scheduleTokenRefresh } from "./axiosConfig.js";
 
 const apiUserUrl =
   "https://backend-tes-505940949397.us-central1.run.app/api/users";
@@ -54,19 +55,14 @@ function setupAuthEventListeners() {
         { withCredentials: true }
       );
 
-      console.log("Login response data:", res.data);
+      const user = res.data.data.user;
+      const accessToken = res.data.data.accessToken;
+      if (!user) throw new Error("User data not found");
 
-      // Misal backend kirim data user langsung di res.data.data
-      const user = res.data.data?.safeUserData;
-      const accessToken = res.data.data?.accessToken;
+      setAuthToken(accessToken);
+      scheduleTokenRefresh();              // <— mulai schedule otomatis
 
-
-      if (!user) throw new Error("User data not found in response");
-
-      alert(`Login berhasil!\nUser ID: ${user.id}\nUser Email: ${user.email}`);
-
-      setAuthToken(res.data.data?.accessToken || res.data.accessToken);
-
+      alert(`Login berhasil!\nEmail: ${user.email}`);
       showNotesApp();
     } catch (err) {
       const msg = err.response?.data?.message || err.message;
@@ -115,15 +111,10 @@ function setupAuthEventListeners() {
 
   // LOGOUT
   logoutBtn.addEventListener("click", async () => {
-    try {
-      await axios.delete(`${apiUserUrl}/logout`, { withCredentials: true });
-    } catch (_) {}
+    await axios.delete(`${apiUserUrl}/logout`, { withCredentials: true });
     setAuthToken(null);
-    localStorage.removeItem("accessToken"); // tambah ini
-
-    showAuth();
+    window.location.reload();             // paksa reload supaya cancel schedule
   });
-}
 
 async function refreshAccessToken() {
   try {
@@ -177,5 +168,5 @@ async function fetchWithTokenRefresh(url, options = {}) {
     throw error;
   }
 }
-
+}
 export { setupAuthEventListeners, showNotesApp, showAuth, clearAuthForms };
