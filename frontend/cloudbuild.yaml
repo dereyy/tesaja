@@ -1,9 +1,0 @@
-steps:
-  # Deploy ke App Engine
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: gcloud
-    args: ["app", "deploy", "--quiet"]
-    dir: "frontend"  
-
-options:
-  logging: CLOUD_LOGGING_ONLY
